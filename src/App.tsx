@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 const App = () => {
   return (
-    <div className="min-h-screen min-w-[260px] max-w-sm m-auto flex flex-col">
+    <div className="min-h-[100svh] min-w-[260px] max-w-sm m-auto flex flex-col">
       <div className="flex-grow flex justify-center items-center">
         <Carousel
           className={clsx(
