@@ -1,6 +1,7 @@
 import bannerTemplateWithLetter from '@/assets/images/b-capitalized.svg';
 import bannerTemplateBlank from '@/assets/images/blank.svg';
 import Carousel from '@/components/Carousel';
+import Button from '@/components/ui/Button';
 import clsx from 'clsx';
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           </Carousel.Slide>
         </Carousel>
       </div>
+      <Button className="mx-6 mb-8">Create new event</Button>
     </div>
   );
 };
