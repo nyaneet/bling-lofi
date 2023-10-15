@@ -1,4 +1,6 @@
 import Carousel from '@/components/Carousel';
+import bannerTemplateWithLetter from '@/assets/images/b-capitalized.svg';
+import bannerTemplateBlank from '@/assets/images/blank.svg';
 
 function App() {
   return (
@@ -6,17 +8,13 @@ function App() {
       <div className="flex-grow flex justify-center items-center">
         <Carousel>
           <Carousel.Slide>
-            <img
-              src="src/assets/banners/b-capitalized.svg"
-              alt=""
-              loading="lazy"
-            />
+            <img src={bannerTemplateWithLetter} alt="" loading="lazy" />
           </Carousel.Slide>
           <Carousel.Slide>
-            <img src="src/assets/banners/blank.svg" alt="" loading="lazy" />
+            <img src={bannerTemplateBlank} alt="" loading="lazy" />
           </Carousel.Slide>
           <Carousel.Slide>
-            <img src="src/assets/banners/blank.svg" alt="" loading="lazy" />
+            <img src={bannerTemplateBlank} alt="" loading="lazy" />
           </Carousel.Slide>
         </Carousel>
       </div>
