@@ -9,7 +9,7 @@ export type ButtonProps = {
 };
 
 const classes = {
-  base: 'inline-block cursor-pointer rounded-2xl transition duration-300 ease-in-out',
+  base: 'inline-block cursor-pointer rounded-2xl transition duration-300 ease-in-out overflow-hidden',
   size: {
     md: 'py-4 px-8 text-base leading-6 font-medium tracking-wide',
   },

@@ -9,9 +9,8 @@
       local('SF-Pro'),
       url('./fonts/SF-Pro.ttf') format('truetype');
   }
-}
-
-html {
-  font-family: 'SF-Pro', 'sans-serif';
-  /* overflow-x: hidden; */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'SF-Pro', 'sans-serif';
+  }
 }
