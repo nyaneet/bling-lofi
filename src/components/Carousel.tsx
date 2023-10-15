@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, PropsWithChildren } from 'react';
 import useEmblaCarousel, { EmblaCarouselType } from 'embla-carousel-react';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 export default function Carousel({ children }: PropsWithChildren) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [

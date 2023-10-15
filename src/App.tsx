@@ -1,6 +1,6 @@
-import Carousel from '@/components/Carousel';
 import bannerTemplateWithLetter from '@/assets/images/b-capitalized.svg';
 import bannerTemplateBlank from '@/assets/images/blank.svg';
+import Carousel from '@/components/Carousel';
 
 function App() {
   return (
