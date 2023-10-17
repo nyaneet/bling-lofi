@@ -4,6 +4,7 @@ import Carousel from '@/components/Carousel';
 import Button from '@/components/ui/Button';
 import MainLayout from '@/views/MainLayout';
 import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
 const banners: { id: number; imageSrc: string; alt: string }[] = [
   { id: 0, imageSrc: bannerTemplateWithLetter, alt: '' },
@@ -15,7 +16,7 @@ const banners: { id: number; imageSrc: string; alt: string }[] = [
 
 const StartPage = () => {
   return (
-    <MainLayout className="flex flex-col">
+    <MainLayout className="flex flex-col px-0">
       <div className="flex-grow flex justify-center items-center">
         <Carousel
           className={clsx(
@@ -32,7 +33,9 @@ const StartPage = () => {
           ))}
         </Carousel>
       </div>
-      <Button className="mx-6 mb-8">Create new event</Button>
+      <Link to="/new" className="mx-6 mb-8">
+        <Button className="w-full box-border">Create new event</Button>
+      </Link>
     </MainLayout>
   );
 };

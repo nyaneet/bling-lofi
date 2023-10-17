@@ -10,7 +10,7 @@ const MainLayout = ({ className, children }: MainLayoutProps) => {
   return (
     <div
       className={clsx(
-        'min-h-[100svh] min-w-[260px] max-w-sm m-auto',
+        'min-h-[100svh] min-w-[260px] max-w-sm m-auto px-6',
         className
       )}
     >
