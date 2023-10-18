@@ -2,9 +2,9 @@ import bannerTemplateWithLetter from '@/assets/images/b-capitalized.svg';
 import bannerTemplateBlank from '@/assets/images/blank.svg';
 import Carousel from '@/components/Carousel';
 import Button from '@/components/ui/Button';
-import MainLayout from '@/views/MainLayout';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import WithControlsLayout from './WithControlsLayout';
 
 const banners: { id: number; imageSrc: string; alt: string }[] = [
   { id: 0, imageSrc: bannerTemplateWithLetter, alt: '' },
@@ -16,27 +16,37 @@ const banners: { id: number; imageSrc: string; alt: string }[] = [
 
 const StartPage = () => {
   return (
-    <MainLayout className="flex flex-col px-0">
-      <div className="flex-grow flex justify-center items-center">
+    <WithControlsLayout>
+      <WithControlsLayout.MainContent className="flex items-center !px-0">
         <Carousel
           className={clsx(
             'mt-8 mb-8',
-            "before:content-[''] before:block before:absolute before:z-10 before:top-0 before:left-0 before:h-full before:w-6 before:bg-gradient-to-r before:from-white",
-            "after:content-[''] after:block after:absolute after:z-10 after:top-0 after:right-0 after:h-full after:w-6 after:bg-gradient-to-l after:from-white"
+            "before:content-[''] before:block before:absolute before:z-10 before:top-0 before:left-0 before:h-full before:w-4 before:bg-gradient-to-r before:from-white",
+            "after:content-[''] after:block after:absolute after:z-10 after:top-0 after:right-0 after:h-full after:w-4 after:bg-gradient-to-l after:from-white"
           )}
           options={{ loop: true }}
         >
-          {banners.map((banner) => (
-            <Carousel.Slide key={banner.id}>
-              <img src={banner.imageSrc} alt={banner.alt} loading="lazy" />
-            </Carousel.Slide>
-          ))}
+          <Carousel.Viewport className="px-4">
+            {banners.map((banner) => (
+              <Carousel.Slide key={banner.id}>
+                <img
+                  className="w-full"
+                  src={banner.imageSrc}
+                  alt={banner.alt}
+                  loading="lazy"
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel.Viewport>
+          <Carousel.ScrollSnaps className="mt-4" />
         </Carousel>
-      </div>
-      <Link to="/new" className="mx-6 mb-8">
-        <Button className="w-full box-border">Create new event</Button>
-      </Link>
-    </MainLayout>
+      </WithControlsLayout.MainContent>
+      <WithControlsLayout.BottomControls>
+        <Link to="/new">
+          <Button className="w-full">Create new event</Button>
+        </Link>
+      </WithControlsLayout.BottomControls>
+    </WithControlsLayout>
   );
 };
 

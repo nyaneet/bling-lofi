@@ -6,17 +6,10 @@ export type MainLayoutProps = {
   children?: ReactNode;
 };
 
-const MainLayout = ({ className, children }: MainLayoutProps) => {
-  return (
-    <div
-      className={clsx(
-        'min-h-[100svh] min-w-[260px] max-w-sm m-auto px-6',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
+const MainLayout = ({ className, children }: MainLayoutProps) => (
+  <div className={clsx('h-[100dvh] min-w-[320px] max-w-md m-auto', className)}>
+    {children}
+  </div>
+);
 
 export default MainLayout;

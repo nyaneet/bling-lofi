@@ -1,10 +1,30 @@
+import WithContentBaseProps from '@/types/withContentBaseProps';
 import clsx from 'clsx';
 import useEmblaCarousel, {
   EmblaCarouselType,
   EmblaOptionsType,
 } from 'embla-carousel-react';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
-import { HTMLProps, ReactNode, useCallback, useEffect, useState } from 'react';
+import {
+  HTMLProps,
+  LegacyRef,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+
+const CarouselContext = createContext<{
+  emblaRef: LegacyRef<HTMLDivElement> | undefined;
+  scrollSnaps: number[];
+  selectedIdx: number;
+}>({
+  emblaRef: undefined,
+  scrollSnaps: [],
+  selectedIdx: 0,
+});
 
 export type CarouselProps = {
   options?: Partial<EmblaOptionsType>;
@@ -37,31 +57,31 @@ const Carousel = ({ options, className, children }: CarouselProps) => {
   }, [emblaApi, onInit, onSelect]);
 
   return (
-    <div className={clsx('embla relative w-full', className)}>
-      <div className="embla__viewport overflow-hidden px-6" ref={emblaRef}>
-        <div className="embla__container flex aspect-square touch-pan-y">
-          {children}
-        </div>
-      </div>
-      <div className="flex justify-center items-center mt-4 space-x-1">
-        {scrollSnaps.map((value, idx) => (
-          <span
-            key={value}
-            className={clsx(
-              'w-[4px] h-[4px] bg-black inline-block rounded-full transition duration-300 ease-in',
-              idx === selectedIdx ? 'scale-125' : 'opacity-50'
-            )}
-          />
-        ))}
+    <CarouselContext.Provider value={{ emblaRef, scrollSnaps, selectedIdx }}>
+      <div className={clsx('embla relative w-full', className)}>{children}</div>
+    </CarouselContext.Provider>
+  );
+};
+
+export type ViewportProps = WithContentBaseProps;
+
+const Viewport = ({ className, children }: ViewportProps) => {
+  const { emblaRef } = useContext(CarouselContext);
+
+  return (
+    <div
+      className={clsx('embla__viewport overflow-hidden', className)}
+      ref={emblaRef}
+    >
+      <div className="embla__container flex aspect-square touch-pan-y">
+        {children}
       </div>
     </div>
   );
 };
+Carousel.Viewport = Viewport;
 
-export type SlideProps = {
-  className?: HTMLProps<HTMLElement>['className'];
-  children?: ReactNode;
-};
+export type SlideProps = WithContentBaseProps;
 
 const Slide = ({ className, children }: SlideProps) => (
   <div className={clsx('embla__slide flex-[0_0_100%] mx-3', className)}>
@@ -69,5 +89,30 @@ const Slide = ({ className, children }: SlideProps) => (
   </div>
 );
 Carousel.Slide = Slide;
+
+export type ScrollSnapsProps = {
+  className: HTMLProps<HTMLElement>['className'];
+};
+
+const ScrollSnaps = ({ className }: ScrollSnapsProps) => {
+  const { scrollSnaps, selectedIdx } = useContext(CarouselContext);
+
+  return (
+    <div
+      className={clsx('flex justify-center items-center space-x-1', className)}
+    >
+      {scrollSnaps.map((value, idx) => (
+        <span
+          key={value}
+          className={clsx(
+            'w-[4px] h-[4px] bg-black inline-block rounded-full transition duration-300 ease-in',
+            idx === selectedIdx ? 'scale-125' : 'opacity-50'
+          )}
+        />
+      ))}
+    </div>
+  );
+};
+Carousel.ScrollSnaps = ScrollSnaps;
 
 export default Carousel;
