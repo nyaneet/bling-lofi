@@ -1,21 +1,57 @@
+import InputFieldWrapper from '@/components/InpuFieldWrapper';
 import Button from '@/components/ui/Button';
-import TextInput from '@/components/ui/TextInput';
-import MainLayout from '@/views/MainLayout';
-import { MouseEventHandler, ReactNode, useCallback, useState } from 'react';
+import Combobox from '@/components/ui/Combobox';
+import InputBase from '@/components/ui/InputBase';
+import WithControlsLayout from '@/views/WithControlsLayout';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Link } from 'react-router-dom';
 
-const removeIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 64 64">
-    <path
-      fill="none"
-      stroke="#000"
-      stroke-width="2"
-      stroke-miterlimit="10"
-      d="m18.947 17.153 26.098 25.903m-26 .097 25.902-26.097"
-    />
-  </svg>
-);
+const currencyList = [
+  { id: 1, value: 'USD' },
+  { id: 2, value: 'RUB' },
+  { id: 3, value: 'EUR' },
+  { id: 4, value: 'CAD' },
+  { id: 5, value: 'BRL' },
+  { id: 6, value: 'BGN' },
+  { id: 7, value: 'HKD' },
+  { id: 8, value: 'JPY' },
+  { id: 9, value: 'KRW' },
+  { id: 10, value: 'PHP' },
+  { id: 11, value: 'TRY' },
+];
 
 const NewEventPage = () => {
+  return (
+    <WithControlsLayout>
+      <WithControlsLayout.TopControls>
+        <h1 className="text-3xl font-semibold">New event</h1>
+      </WithControlsLayout.TopControls>
+      <WithControlsLayout.MainContent className="space-y-4">
+        <NewEventPageInputs />
+      </WithControlsLayout.MainContent>
+      <WithControlsLayout.BottomControls>
+        <div className="flex space-x-2">
+          <Link to="/" tabIndex={-1}>
+            <Button className="" variant="filled" color="gray">
+              Cancel
+            </Button>
+          </Link>
+          <Button className="flex-grow">Create</Button>
+        </div>
+      </WithControlsLayout.BottomControls>
+    </WithControlsLayout>
+  );
+};
+
+const NewEventPageInputs = () => {
   const [participants, setParticipants] = useState<string[]>(['']);
 
   const addParticipant = useCallback(() => {
@@ -26,89 +62,99 @@ const NewEventPage = () => {
   }, []);
 
   return (
-    <MainLayout className="relative flex flex-col">
-      {/* content */}
-      <div className="py-8 space-y-4 mb-4 flex-grow">
-        <h1 className="text-3xl font-semibold">New event</h1>
-        <TextInputField__Temp
+    <>
+      <InputFieldWrapper id="event-name" label="Name">
+        <InputBase
+          className="w-full"
           id="event-name"
-          label="Your name"
-          placeholder="Enter name..."
+          placeholder="Enter event name..."
+          type="text"
         />
-        <h2 className="text-2xl font-semibold">Participants</h2>
+      </InputFieldWrapper>
 
-        <TextInputField__Temp
-          id="host-name"
-          label="Name"
-          placeholder="Enter your name..."
+      <InputFieldWrapper id="currency" label="Currency">
+        <Combobox
+          className="w-full"
+          id="currency"
+          placeholder="Choose currency..."
+          items={currencyList}
         />
-        {participants.map((_, idx) => (
-          <TextInputField__Temp
-            key={idx}
-            id={`participant-${idx}-name`}
-            label={`Participant ${idx + 1} name`}
-            placeholder="Enter name..."
-            iconButtonOptions={
-              idx !== 0
-                ? {
-                    icon: removeIcon,
-                    onClick: () => removeParticipant(idx),
-                  }
-                : undefined
-            }
-          />
-        ))}
-        <Button
-          className="block w-full"
-          variant="outlined"
-          onClick={addParticipant}
-        >
-          Add participant
-        </Button>
-      </div>
-      {/* bottom controls */}
-      <div className="sticky bottom-0 py-8 bg-gradient-to-t from-[#FFFFFFB3] from-80% via-[#FFFFFFB3]">
-        <Button className="block w-full ">Create</Button>
-      </div>
-    </MainLayout>
+      </InputFieldWrapper>
+
+      <h2 className="!mt-6 text-2xl font-semibold">Participants</h2>
+
+      <InputFieldWrapper id="host-name" label="Your name">
+        <InputBase
+          className="w-full"
+          id="host-name"
+          placeholder="Enter your name..."
+          type="text"
+        />
+      </InputFieldWrapper>
+
+      {participants.map((_, idx) => (
+        <ParticipantNameInput
+          key={idx}
+          idx={idx}
+          removeParticipant={removeParticipant}
+        />
+      ))}
+      <Button
+        className="w-full scroll-mt-6"
+        variant="outlined"
+        onClick={addParticipant}
+      >
+        Add participant
+      </Button>
+    </>
   );
 };
 
-const TextInputField__Temp = ({
-  id,
-  label,
-  placeholder,
-  className,
-  iconButtonOptions,
-}: {
-  id: string;
-  label: string;
-  placeholder: string;
-  className?: HTMLElement['className'];
-  iconButtonOptions?: {
-    icon: ReactNode;
-    onClick: MouseEventHandler<HTMLButtonElement>;
-  };
-}) => (
-  <div className={className}>
-    <label htmlFor={id}>
-      <span className="text-sm text-[#8A8A8D] font-normal block">{label}</span>
-      <div className="relative mt-1">
-        <TextInput className="w-full pr-12" id={id} placeholder={placeholder} />
-        {iconButtonOptions && (
-          <div className="absolute top-0 right-0 h-full flex items-stretch">
-            <button
-              className="m-4 focusable rounded"
-              onClick={iconButtonOptions.onClick}
-            >
-              {iconButtonOptions.icon}
-            </button>
-          </div>
-        )}
-      </div>
-    </label>
-    {/* extra message here */}
-  </div>
-);
+type ParticipantNameInputProps = {
+  idx: number;
+  removeParticipant: (idx: number) => void;
+  onMount?: () => void;
+};
+
+const ParticipantNameInput = ({
+  idx,
+  removeParticipant,
+}: ParticipantNameInputProps) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (ref.current && idx !== 0) ref.current.focus();
+  }, [idx]);
+
+  const deleteButton = useMemo<ReactNode>(
+    () => (
+      <span className="h-full py-4 pl-2 pr-4 flex items-center">
+        <button
+          className="h-6 p-1 rounded-md focusable"
+          onClick={() => removeParticipant(idx)}
+        >
+          <TrashIcon className="text-gray-300 h-full" />
+        </button>
+      </span>
+    ),
+    [idx, removeParticipant]
+  );
+
+  return (
+    <InputFieldWrapper
+      id={`participant-${idx}-name`}
+      label={`Participant ${idx + 1} name`}
+    >
+      <InputBase
+        ref={ref}
+        type="text"
+        className="w-full"
+        id={`participant-${idx}-name`}
+        placeholder="Enter participant name..."
+        trailing={idx !== 0 ? deleteButton : null}
+      />
+    </InputFieldWrapper>
+  );
+};
 
 export default NewEventPage;

@@ -6,6 +6,7 @@ export default {
       colors: {
         charleston: '#2C2C2E',
         antiflash: '#F2F2F7',
+        platinum: '#E5E5E9',
         coralred: '#FF3B30',
       },
     },

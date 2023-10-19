@@ -42,7 +42,7 @@ const StartPage = () => {
         </Carousel>
       </WithControlsLayout.MainContent>
       <WithControlsLayout.BottomControls>
-        <Link to="/new">
+        <Link to="/new" tabIndex={-1}>
           <Button className="w-full">Create new event</Button>
         </Link>
       </WithControlsLayout.BottomControls>
