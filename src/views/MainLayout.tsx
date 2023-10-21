@@ -1,7 +1,6 @@
 import WithContentBaseProps from '@/types/withChildrenBaseProps';
 import WithClassBaseProps from '@/types/withClassBaseProps';
 import clsx from 'clsx';
-import { HTMLProps, ReactNode } from 'react';
 
 export type MainLayoutProps = WithClassBaseProps & WithContentBaseProps;
 
