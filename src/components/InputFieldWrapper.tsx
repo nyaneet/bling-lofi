@@ -1,10 +1,12 @@
-import WithContentBaseProps from '@/types/withContentBaseProps';
+import WithClassBaseProps from '@/types/withClassBaseProps';
+import WithContentBaseProps from '@/types/withChildrenBaseProps';
 
-export type InputFieldWrapperProps = WithContentBaseProps & {
+export type InputFieldWrapperProps = {
   id: string;
   label: string;
   helperMessage?: string;
-};
+} & WithContentBaseProps &
+  WithClassBaseProps;
 
 const InputFieldWrapper = ({
   className,

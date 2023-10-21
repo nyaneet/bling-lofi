@@ -1,10 +1,9 @@
+import WithContentBaseProps from '@/types/withChildrenBaseProps';
+import WithClassBaseProps from '@/types/withClassBaseProps';
 import clsx from 'clsx';
 import { HTMLProps, ReactNode } from 'react';
 
-export type MainLayoutProps = {
-  className?: HTMLProps<HTMLElement>['className'];
-  children?: ReactNode;
-};
+export type MainLayoutProps = WithClassBaseProps & WithContentBaseProps;
 
 const MainLayout = ({ className, children }: MainLayoutProps) => (
   <div className={clsx('h-[100dvh] min-w-[320px] max-w-md m-auto', className)}>

@@ -1,17 +1,11 @@
-import InputFieldWrapper from '@/components/InpuFieldWrapper';
+import InputFieldWrapper from '@/components/InputFieldWrapper';
 import Button from '@/components/ui/Button';
 import Combobox from '@/components/ui/Combobox';
+import Heading from '@/components/ui/Heading';
 import InputBase from '@/components/ui/InputBase';
 import WithControlsLayout from '@/views/WithControlsLayout';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const currencyList = [
@@ -32,7 +26,7 @@ const NewEventPage = () => {
   return (
     <WithControlsLayout>
       <WithControlsLayout.TopControls>
-        <h1 className="text-3xl font-semibold">New event</h1>
+        <Heading>New event</Heading>
       </WithControlsLayout.TopControls>
       <WithControlsLayout.MainContent className="space-y-4">
         <NewEventPageInputs />
@@ -44,7 +38,9 @@ const NewEventPage = () => {
               Cancel
             </Button>
           </Link>
-          <Button className="flex-grow">Create</Button>
+          <Link to="/event" tabIndex={-1} className="flex-grow">
+            <Button className="w-full">Create</Button>
+          </Link>
         </div>
       </WithControlsLayout.BottomControls>
     </WithControlsLayout>
@@ -53,13 +49,14 @@ const NewEventPage = () => {
 
 const NewEventPageInputs = () => {
   const [participants, setParticipants] = useState<string[]>(['']);
+  const addParticipantButtonRef = useRef<HTMLButtonElement>(null);
 
-  const addParticipant = useCallback(() => {
+  const addParticipant = () => {
     setParticipants((prev) => [...prev, '']);
-  }, []);
-  const removeParticipant = useCallback((idx: number) => {
+  };
+  const removeParticipant = (idx: number) => {
     setParticipants((prev) => [...prev.slice(0, idx), ...prev.slice(idx + 1)]);
-  }, []);
+  };
 
   return (
     <>
@@ -81,7 +78,9 @@ const NewEventPageInputs = () => {
         />
       </InputFieldWrapper>
 
-      <h2 className="!mt-6 text-2xl font-semibold">Participants</h2>
+      <Heading className="!mt-6" as="h2" size="md">
+        Participants
+      </Heading>
 
       <InputFieldWrapper id="host-name" label="Your name">
         <InputBase
@@ -97,12 +96,18 @@ const NewEventPageInputs = () => {
           key={idx}
           idx={idx}
           removeParticipant={removeParticipant}
+          autoFocus={idx !== 0}
+          onMount={() => {
+            if (addParticipantButtonRef.current)
+              addParticipantButtonRef.current.scrollIntoView(false);
+          }}
         />
       ))}
       <Button
-        className="w-full scroll-mt-6"
+        className="w-full scroll-m-6"
         variant="outlined"
         onClick={addParticipant}
+        ref={addParticipantButtonRef}
       >
         Add participant
       </Button>
@@ -113,31 +118,37 @@ const NewEventPageInputs = () => {
 type ParticipantNameInputProps = {
   idx: number;
   removeParticipant: (idx: number) => void;
+  autoFocus?: boolean;
   onMount?: () => void;
 };
 
 const ParticipantNameInput = ({
   idx,
   removeParticipant,
+  autoFocus = false,
+  onMount,
 }: ParticipantNameInputProps) => {
   const ref = useRef<HTMLInputElement>(null);
+  const onMountRef = useRef<() => void>();
+  if (onMount) onMountRef.current = onMount;
 
   useEffect(() => {
-    if (ref.current && idx !== 0) ref.current.focus();
-  }, [idx]);
+    if (onMountRef.current) onMountRef.current();
+  }, []);
 
-  const deleteButton = useMemo<ReactNode>(
-    () => (
-      <span className="h-full py-4 pl-2 pr-4 flex items-center">
-        <button
-          className="h-6 p-1 rounded-md focusable"
-          onClick={() => removeParticipant(idx)}
-        >
-          <TrashIcon className="text-gray-300 h-full" />
-        </button>
-      </span>
-    ),
-    [idx, removeParticipant]
+  useEffect(() => {
+    if (autoFocus && ref.current) ref.current.focus();
+  }, [autoFocus]);
+
+  const deleteButton = (
+    <span className="h-full py-4 pl-2 pr-4 flex items-center">
+      <button
+        className="h-6 p-1 rounded-md focusable"
+        onClick={() => removeParticipant(idx)}
+      >
+        <TrashIcon className="text-gray-300 h-full" strokeWidth={2} />
+      </button>
+    </span>
   );
 
   return (

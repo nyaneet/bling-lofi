@@ -9,10 +9,16 @@ export default {
         platinum: '#E5E5E9',
         coralred: '#FF3B30',
       },
+      boxShadow: {
+        base: '0 8px 16px 0 rgba(42, 45, 47, 0.05)',
+      },
     },
     fontFamily: {
       sfpro: ['SF-Pro', 'sans-serif'],
     },
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
   plugins: [],
 };

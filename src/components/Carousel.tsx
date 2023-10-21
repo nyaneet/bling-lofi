@@ -1,3 +1,4 @@
+import WithClassBaseProps from '@/types/withClassBaseProps';
 import WithContentBaseProps from '@/types/withContentBaseProps';
 import clsx from 'clsx';
 import useEmblaCarousel, {
@@ -8,7 +9,6 @@ import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import {
   HTMLProps,
   LegacyRef,
-  ReactNode,
   createContext,
   useCallback,
   useContext,
@@ -27,10 +27,9 @@ const CarouselContext = createContext<{
 });
 
 export type CarouselProps = {
-  options?: Partial<EmblaOptionsType>;
-  className?: HTMLProps<HTMLElement>['className'];
-  children?: ReactNode;
-};
+  options?: EmblaOptionsType;
+} & WithClassBaseProps &
+  WithContentBaseProps;
 
 const Carousel = ({ options, className, children }: CarouselProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
@@ -63,7 +62,7 @@ const Carousel = ({ options, className, children }: CarouselProps) => {
   );
 };
 
-export type ViewportProps = WithContentBaseProps;
+export type ViewportProps = WithClassBaseProps & WithContentBaseProps;
 
 const Viewport = ({ className, children }: ViewportProps) => {
   const { emblaRef } = useContext(CarouselContext);
@@ -81,7 +80,7 @@ const Viewport = ({ className, children }: ViewportProps) => {
 };
 Carousel.Viewport = Viewport;
 
-export type SlideProps = WithContentBaseProps;
+export type SlideProps = WithClassBaseProps & WithContentBaseProps;
 
 const Slide = ({ className, children }: SlideProps) => (
   <div className={clsx('embla__slide flex-[0_0_100%] mx-3', className)}>

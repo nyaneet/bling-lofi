@@ -1,9 +1,8 @@
+import WithClassBaseProps from '@/types/withClassBaseProps';
 import { Combobox as HeadlessCombobox } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { HTMLProps, useMemo, useState } from 'react';
-
-// testing styles
+import { useMemo, useState } from 'react';
 
 export type ComboboxItem = {
   id: string | number;
@@ -11,11 +10,10 @@ export type ComboboxItem = {
 };
 
 export type ComboboxProps = {
-  className: HTMLProps<HTMLElement>['className'];
   items: ComboboxItem[];
   placeholder?: string;
   id?: string;
-};
+} & WithClassBaseProps;
 
 const Combobox = ({ className, items, placeholder, id }: ComboboxProps) => {
   const [selected, setSelected] = useState();
@@ -47,7 +45,7 @@ const Combobox = ({ className, items, placeholder, id }: ComboboxProps) => {
             onChange={(event) => setQuery(event.target.value)}
           />
           <HeadlessCombobox.Button className="absolute top-0 bottom-0 right-0 flex items-center pr-4">
-            <ChevronDownIcon className="text-gray-300 h-4 ![&>path]:stroke-2" />
+            <ChevronDownIcon className="text-gray-300 h-4" strokeWidth={3} />
           </HeadlessCombobox.Button>
         </div>
         <HeadlessCombobox.Options className="absolute mt-2 max-h-60 w-full overflow-auto shadow-md border-[#E5E5EA] border-solid border-[1px] rounded-md bg-white z-50">

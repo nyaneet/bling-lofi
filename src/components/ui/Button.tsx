@@ -11,40 +11,44 @@ export type ButtonProps = Override<
   }
 >;
 
+const buttonClasses = {
+  base: 'min-w-[128px] cursor-pointer rounded-2xl focusable',
+  animated: 'transition-colors transition-shadow duration-300 ease-in-out',
+  size: {
+    md: 'py-4 px-8 text-base leading-6 font-medium tracking-wide',
+  },
+  variant: {
+    filled: {
+      base: 'focus-visible:opacity-[0.85] focus-visible:shadow-none active:opacity-70 hover:shadow-base hover:shadow-gray-900/20 active:shadow-none',
+      black: 'bg-charleston text-white',
+      gray: 'bg-platinum text-black',
+    },
+    outlined:
+      'bg-transparent text-black border-platinum border-solid border-[1px] active:bg-platinum active:opacity-80 hover:bg-platinum',
+  },
+  disabled: 'opacity-50 cursor-not-allowed',
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { className, size = 'md', variant = 'filled', color = 'black', ...props },
     ref
   ) => {
     const { children, disabled } = props;
-    const classes = {
-      base: 'cursor-pointer rounded-2xl overflow-hidden focusable',
-      animated: 'transition-colors duration-300 ease-in-out',
-      size: {
-        md: 'py-4 px-8 text-base leading-6 font-medium tracking-wide',
-      },
-      variant: {
-        filled: {
-          black:
-            'bg-charleston text-white focus-visible:opacity-[0.85] focus-visible:shadow-none active:opacity-80 hover:shadow-lg hover:shadow-gray-900/20 active:shadow-none',
-          gray: 'bg-platinum text-black focus-visible:opacity-[0.85] focus-visible:shadow-none active:opacity-80 hover:shadow-lg hover:shadow-gray-900/20 active:shadow-none',
-        },
-        outlined:
-          'bg-transparent text-black border-platinum border-solid border-[1px] active:bg-platinum active:opacity-80 hover:bg-platinum',
-      },
-      disabled: 'opacity-50 cursor-not-allowed',
-    };
 
     return (
       <button
         className={clsx(
-          classes.base,
-          classes.animated,
-          classes.size[size],
+          buttonClasses.base,
+          buttonClasses.animated,
+          buttonClasses.size[size],
           variant === 'filled'
-            ? classes.variant[variant][color]
-            : classes.variant[variant],
-          disabled && classes.disabled,
+            ? clsx(
+                buttonClasses.variant.filled.base,
+                buttonClasses.variant.filled[color]
+              )
+            : buttonClasses.variant[variant],
+          disabled && buttonClasses.disabled,
           className
         )}
         ref={ref}
